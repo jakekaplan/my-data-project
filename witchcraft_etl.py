@@ -20,7 +20,6 @@ INGREDIENTS = [
     "howlet’s 🦉 wing",
 ]
 
-# ────────────── tasks ──────────────
 @task
 def gather_ingredients(batch: int = 4) -> list[str]:
     stash = INGREDIENTS[:batch]
@@ -57,7 +56,6 @@ def bottle_potion(potion: str, verdict: str, destination: str = "warehouse.spell
 
 
 
-# ────────────── flow ──────────────
 @flow(log_prints=True)
 def witchcraft_etl(batch: int = 4):
     stash = gather_ingredients(batch)
