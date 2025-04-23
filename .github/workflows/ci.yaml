@@ -7,10 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, stg, prd]
-    environment: Prefect Cloud [${{ matrix.environment }}]
     env:
       PREFECT_CLOUD_API_URL: ${{ vars.PREFECT_CLOUD_API_URL }}
       PREFECT_API_URL: ${{ vars.PREFECT_API_URL }}
@@ -29,11 +25,11 @@ jobs:
           pip install uv
           uv pip install --system git+https://github.com/PrefectHQ/prefect.git@main
 
-      - name: Deploy flows to ${{ matrix.environment }}
+      - name: Deploy flows
         run: prefect --no-prompt deploy --all
 
-      - name: Run hello on ${{ matrix.environment }}
-        run: |
-          prefect deployment run 'say-hello/[Say ✨ my ✨ name]' \
-          --param name=Github \
-          --watch --watch-timeout 60
+#      - name: Run hello on ${{ matrix.environment }}
+#        run: |
+#          prefect deployment run 'say-hello/[Say ✨ my ✨ name]' \
+#          --param name=Github \
+#          --watch --watch-timeout 60
