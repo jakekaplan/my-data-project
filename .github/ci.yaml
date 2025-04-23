@@ -1,0 +1,39 @@
+name: Deploy Prefect Flows
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, stg, prd]
+    environment: Prefect Cloud [${{ matrix.environment }}]
+    env:
+      PREFECT_CLOUD_API_URL: ${{ vars.PREFECT_CLOUD_API_URL }}
+      PREFECT_API_URL: ${{ vars.PREFECT_API_URL }}
+      PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        id: setup_python
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system git+https://github.com/PrefectHQ/prefect.git@main
+
+      - name: Deploy flows to ${{ matrix.environment }}
+        run: prefect --no-prompt deploy --all
+
+      - name: Run hello on ${{ matrix.environment }}
+        run: |
+          prefect deployment run 'say-hello/[Say ✨ my ✨ name]' \
+          --param name=Github \
+          --watch --watch-timeout 60
