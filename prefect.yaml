@@ -18,7 +18,7 @@ pull:
     id: git-clone
     repository: https://github.com/jakekaplan/my-data-project
     branch: main
-- prefect.deployments.steps.run_shell_script":
+- prefect.deployments.steps.run_shell_script:
       directory: "{{ git-clone.directory }}"
       script: "uv pip install -r pyproject.toml"
 

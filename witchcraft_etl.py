@@ -6,6 +6,7 @@ Run with:  python witchcraft_etl.py
 
 from random import randint, random
 from time import sleep
+import pandas
 from prefect import flow, task
 from prefect.artifacts import create_markdown_artifact
 
